@@ -21,7 +21,7 @@ void inOrderTraversal(TreeNodeInt *node)
     if (node == nullptr)
         return;
     inOrderTraversal(node->left);
-    cout << node->value << endl;
+    cout << node->value << " ";
     inOrderTraversal(node->right);
 }
 
@@ -30,7 +30,7 @@ void preOrderTraversal(TreeNodeInt *node)
 {
     if (node == nullptr)
         return;
-    cout << node->value << endl;
+    cout << node->value << " ";
     preOrderTraversal(node->left);
     preOrderTraversal(node->right);
 }
@@ -42,7 +42,7 @@ void postOrderTraversal(TreeNodeInt *node)
         return;
     postOrderTraversal(node->left);
     postOrderTraversal(node->right);
-    cout << node->value << endl;
+    cout << node->value << " ";
 }
 
 TreeNodeInt *returnBST()
@@ -86,11 +86,13 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
     }
     if (node->value > newNode->value)
     {
-        node->right = this->Insert(node->right, newNode);
+        node->left = this->Insert(node->left, newNode);
+        return node;
     }
     if (node->value < newNode->value)
     {
-        node->left = this->Insert(node->left, newNode);
+        node->right = this->Insert(node->right, newNode);
+        return node;
     }
 }
 
@@ -110,12 +112,18 @@ int main()
     TreeNodeInt *root1 = new TreeNodeInt(200);
     TreeNodeInt *root2 = new TreeNodeInt(50);
     TreeNodeInt *root3 = new TreeNodeInt(600);
+    TreeNodeInt *root4 = new TreeNodeInt(40);
     tree.root = root;
     tree.Insert(nullptr,root);
     tree.Insert(tree.root,root1);
     tree.Insert(tree.root,root2);
     tree.Insert(tree.root,root3);
+    tree.Insert(tree.root,root4);
     inOrderTraversal(tree.root);
+    cout<<endl;
+    preOrderTraversal(tree.root);
+    cout<<endl;
+    postOrderTraversal(tree.root);
 
     return 0;
 }
