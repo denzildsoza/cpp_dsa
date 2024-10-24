@@ -45,9 +45,7 @@ void postOrderTraversal(TreeNodeInt *node)
     cout << node->value << endl;
 }
 
-void insertInBinaryTree()
-
-int main()
+TreeNodeInt *returnBST()
 {
     TreeNodeInt *root = new TreeNodeInt(100);
 
@@ -68,8 +66,56 @@ int main()
     node4->left = node6;
     node4->right = node5;
 
-    preOrderTraversal(root);
-    free(root);
-    root = nullptr;
+    return root;
+}
+
+class Tree_TreeNodeInt
+{
+public:
+    TreeNodeInt *root = nullptr;
+    // Tree_(/* args */);
+    // ~Tree_();
+    TreeNodeInt *Insert(TreeNodeInt *node, TreeNodeInt *newNode);
+};
+
+TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
+{
+    if (node == nullptr)
+    {
+        return newNode;
+    }
+    if (node->value > newNode->value)
+    {
+        node->right = this->Insert(node->right, newNode);
+    }
+    if (node->value < newNode->value)
+    {
+        node->left = this->Insert(node->left, newNode);
+    }
+}
+
+// Tree_::Tree_(/* args */)
+// {
+// }
+
+// Tree_::~Tree_()
+// {
+// }
+
+int main()
+{
+    int a[10] = {20, 10, 40, 50, 60, 30, 90, 80, 100, 70};
+    Tree_TreeNodeInt tree;
+    TreeNodeInt *root = new TreeNodeInt(100);
+    TreeNodeInt *root1 = new TreeNodeInt(200);
+    TreeNodeInt *root2 = new TreeNodeInt(50);
+    TreeNodeInt *root3 = new TreeNodeInt(600);
+    tree.root = root;
+    tree.Insert(nullptr,root);
+    tree.Insert(tree.root,root1);
+    tree.Insert(tree.root,root2);
+    tree.Insert(tree.root,root3);
+    inOrderTraversal(tree.root);
+
     return 0;
 }
