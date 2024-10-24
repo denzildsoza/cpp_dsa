@@ -1,34 +1,75 @@
-class Node_Int
-{
-public:
-    int value;
-    struct Node_Int *left;
-    struct Node_Int *right;
+#include <bits/stdc++.h>
 
-    Node_Int *createNode(int value)
+using namespace std;
+
+struct TreeNodeInt
+{
+    int value;
+    TreeNodeInt *left;
+    TreeNodeInt *right;
+
+    TreeNodeInt(int v)
     {
-        Node_Int node;
-        node.value = value;
-        node.left = nullptr;
-        node.right = nullptr;
+        value = v;
+        left = right = nullptr;
     }
 };
 
-class Binary_Tree
+// In-order DFS: Left, Root, Right
+void inOrderTraversal(TreeNodeInt *node)
 {
-public:
-    Node_Int *root;
-
-    struct Node_Int *Insert(int value);
-    void preOrderTraversal(Node_Int *root);
-};
-
-void Binary_Tree::preOrderTraversal(Node_Int *root)
-{
+    if (node == nullptr)
+        return;
+    inOrderTraversal(node->left);
+    cout << node->value << endl;
+    inOrderTraversal(node->right);
 }
+
+// Pre-order DFS: Root, Left, Right
+void preOrderTraversal(TreeNodeInt *node)
+{
+    if (node == nullptr)
+        return;
+    cout << node->value << endl;
+    preOrderTraversal(node->left);
+    preOrderTraversal(node->right);
+}
+
+// Post-order DFS: Left, Right, Root
+void postOrderTraversal(TreeNodeInt *node)
+{
+    if (node == nullptr)
+        return;
+    postOrderTraversal(node->left);
+    postOrderTraversal(node->right);
+    cout << node->value << endl;
+}
+
+void insertInBinaryTree()
 
 int main()
 {
+    TreeNodeInt *root = new TreeNodeInt(100);
 
+    TreeNodeInt *node1 = new TreeNodeInt(80);
+    TreeNodeInt *node2 = new TreeNodeInt(50);
+    TreeNodeInt *node3 = new TreeNodeInt(40);
+
+    TreeNodeInt *node4 = new TreeNodeInt(120);
+    TreeNodeInt *node5 = new TreeNodeInt(130);
+    TreeNodeInt *node6 = new TreeNodeInt(110);
+
+    root->left = node1;
+    root->right = node4;
+
+    node1->left = node3;
+    node3->right = node2;
+
+    node4->left = node6;
+    node4->right = node5;
+
+    preOrderTraversal(root);
+    free(root);
+    root = nullptr;
     return 0;
 }
