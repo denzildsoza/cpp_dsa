@@ -76,6 +76,9 @@ public:
     // Tree_(/* args */);
     // ~Tree_();
     TreeNodeInt *Insert(TreeNodeInt *node, TreeNodeInt *newNode);
+    TreeNodeInt *BalanceBinaryTree(TreeNodeInt *node);
+    TreeNodeInt *BalanceTree(TreeNodeInt *node);
+    int BalanceFactor(TreeNodeInt *node);
 };
 
 TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
@@ -96,6 +99,37 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
     }
 }
 
+TreeNodeInt *Tree_TreeNodeInt::BalanceTree(TreeNodeInt *node)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+}
+
+int Tree_TreeNodeInt::BalanceFactor(TreeNodeInt *node)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+    int Lb = 1 + BalanceFactor(node->left);
+    int Rb = 1 + BalanceFactor(node->right);
+    if (abs(Lb - Rb) > 1)
+    {
+        // Balancing Logic
+        
+    }
+    return max(abs(Lb), abs(Rb));
+}
+
+TreeNodeInt *Tree_TreeNodeInt::BalanceBinaryTree(TreeNodeInt *node)
+{
+    int bf = BalanceFactor(node);
+    cout << bf << endl;
+    return node;
+}
+
 // Tree_::Tree_(/* args */)
 // {
 // }
@@ -106,24 +140,27 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
 
 int main()
 {
-    int a[10] = {20, 10, 40, 50, 60, 30, 90, 80, 100, 70};
+    int a[10] = {200, 300};
+    // int a[10] = {20, 10, 40, 50, 60, 30, 90, 80, 71, 70};
     Tree_TreeNodeInt tree;
     TreeNodeInt *root = new TreeNodeInt(100);
-    TreeNodeInt *root1 = new TreeNodeInt(200);
-    TreeNodeInt *root2 = new TreeNodeInt(50);
-    TreeNodeInt *root3 = new TreeNodeInt(600);
-    TreeNodeInt *root4 = new TreeNodeInt(40);
-    tree.root = root;
-    tree.Insert(nullptr,root);
-    tree.Insert(tree.root,root1);
-    tree.Insert(tree.root,root2);
-    tree.Insert(tree.root,root3);
-    tree.Insert(tree.root,root4);
-    inOrderTraversal(tree.root);
-    cout<<endl;
-    preOrderTraversal(tree.root);
-    cout<<endl;
-    postOrderTraversal(tree.root);
 
+    tree.root = root;
+    tree.Insert(nullptr, root);
+
+    int arraySize = sizeof(a) / sizeof(int);
+
+    for (int i = 0; i < arraySize; i++)
+    {
+        TreeNodeInt *newNode = new TreeNodeInt(a[i]);
+        tree.Insert(tree.root, newNode);
+    }
+
+    inOrderTraversal(tree.root);
+    cout << endl;
+    preOrderTraversal(tree.root);
+    cout << endl;
+    postOrderTraversal(tree.root);
+    tree.BalanceBinaryTree(tree.root);
     return 0;
 }
