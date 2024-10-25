@@ -78,6 +78,8 @@ public:
     TreeNodeInt *Insert(TreeNodeInt *node, TreeNodeInt *newNode);
     TreeNodeInt *BalanceBinaryTree(TreeNodeInt *node);
     TreeNodeInt *BalanceTree(TreeNodeInt *node);
+    TreeNodeInt *LeftRotate(TreeNodeInt *node);
+    TreeNodeInt *RightRotate(TreeNodeInt *node);
     int BalanceFactor(TreeNodeInt *node);
 };
 
@@ -118,16 +120,33 @@ int Tree_TreeNodeInt::BalanceFactor(TreeNodeInt *node)
     if (abs(Lb - Rb) > 1)
     {
         // Balancing Logic
-        
     }
     return max(abs(Lb), abs(Rb));
 }
 
 TreeNodeInt *Tree_TreeNodeInt::BalanceBinaryTree(TreeNodeInt *node)
 {
-    int bf = BalanceFactor(node);
+    int bf = BalanceFactor(node) - 1;
     cout << bf << endl;
     return node;
+}
+
+TreeNodeInt *Tree_TreeNodeInt::LeftRotate(TreeNodeInt *node)
+{
+    TreeNodeInt *temp = node->right->left;
+    TreeNodeInt *temp1 = node->right;
+    node->right->left = node;
+    node->right = temp;
+    return temp1;
+}
+
+TreeNodeInt *Tree_TreeNodeInt::RightRotate(TreeNodeInt *node)
+{
+    TreeNodeInt *temp  = node->left->right;
+    TreeNodeInt *temp1 = node->left;
+    node->left->right = node;
+    node->left = temp;
+    return temp1;
 }
 
 // Tree_::Tree_(/* args */)
@@ -140,7 +159,7 @@ TreeNodeInt *Tree_TreeNodeInt::BalanceBinaryTree(TreeNodeInt *node)
 
 int main()
 {
-    int a[10] = {200, 300};
+    int a[10] = {90, 80};
     // int a[10] = {20, 10, 40, 50, 60, 30, 90, 80, 71, 70};
     Tree_TreeNodeInt tree;
     TreeNodeInt *root = new TreeNodeInt(100);
@@ -162,5 +181,8 @@ int main()
     cout << endl;
     postOrderTraversal(tree.root);
     tree.BalanceBinaryTree(tree.root);
+    TreeNodeInt *rotated = tree.RightRotate(tree.root);
+    tree.BalanceBinaryTree(rotated);
+
     return 0;
 }
