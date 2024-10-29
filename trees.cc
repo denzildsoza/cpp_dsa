@@ -178,12 +178,8 @@ TreeNodeInt *Tree_TreeNodeInt::RightRotate(TreeNodeInt *node)
 int main()
 {
     // int a[10] = {90, 80};
-    int a[] = {20, 10, 40, 50, 60, 30, 90, 80, 71, 70, 5,6,89};
+    int a[] = {100, 20, 10, 40, 50, 60, 30, 90, 80, 71, 70, 5, 6, 89};
     Tree_TreeNodeInt tree;
-    TreeNodeInt *root = new TreeNodeInt(100);
-
-    tree.root = root;
-    tree.Insert(nullptr, root);
     int arraySize = sizeof(a) / sizeof(int);
     for (int i = 0; i < arraySize; i++)
     {
