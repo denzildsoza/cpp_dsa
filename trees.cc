@@ -78,6 +78,7 @@ public:
     // Tree_(/* args */);
     // ~Tree_();
     TreeNodeInt *Insert(TreeNodeInt *node, TreeNodeInt *newNode);
+    TreeNodeInt *Delete(TreeNodeInt *node, int key);
     TreeNodeInt *LeftRotate(TreeNodeInt *node);
     TreeNodeInt *RightRotate(TreeNodeInt *node);
     int BalanceFactor(TreeNodeInt *node);
@@ -105,10 +106,8 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
         node->right = this->Insert(node->right, newNode);
     }
     this->BalanceFactor(node);
-    cout << "node left==> " << node->left << " node right==> " << node->right << endl;
     int bf = getDepth(node->left) - getDepth(node->right);
 
-    cout << "bf" << "==>" << node->value << "==>" << bf << endl;
     // right right rotation
     if (bf > 1 && newNode->value < node->left->value)
     {
@@ -134,6 +133,53 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
     }
 
     return node;
+}
+
+TreeNodeInt *getSuccessor(TreeNodeInt *curr)
+{
+    // 		to get inordersuccessor simply find
+    // 		extreme left of right subtree of node
+    curr = curr->right;
+    while (curr != NULL && curr->left != NULL)
+        curr = curr->left;
+    return curr;
+}
+
+TreeNodeInt *Tree_TreeNodeInt::Delete(TreeNodeInt *node, int key)
+{
+    if (node == nullptr)
+    {
+        return nullptr;
+    }
+    if (node->value > key)
+    {
+        node->left = Delete(node->left, key);
+        return node;
+    }
+    if (node->value < key)
+    {
+        node->right = Delete(node->right, key);
+        return node;
+    }
+    if (node->left == nullptr && root->right == nullptr)
+    {
+        return nullptr;
+    }
+    if (node->left == nullptr)
+    {
+        return node->right;
+    }
+    if (node->right == nullptr)
+    {
+        return node->left;
+    }
+    if (node->left != nullptr && root->right != nullptr)
+    {
+        TreeNodeInt *succ = getSuccessor(root);
+        root->value = succ->value;
+        root->right = Delete(root->right, succ->value);
+        return node;
+    }
 }
 
 int Tree_TreeNodeInt::BalanceFactor(TreeNodeInt *node)
@@ -177,25 +223,23 @@ TreeNodeInt *Tree_TreeNodeInt::RightRotate(TreeNodeInt *node)
 
 int main()
 {
-    // int a[10] = {90, 80};
+    // int a[] = {100,90, 80};
     int a[] = {100, 20, 10, 40, 50, 60, 30, 90, 80, 71, 70, 5, 6, 89};
     Tree_TreeNodeInt tree;
     int arraySize = sizeof(a) / sizeof(int);
     for (int i = 0; i < arraySize; i++)
     {
-        cout << "a[i]==>" << a[i] << endl;
         TreeNodeInt *newNode = new TreeNodeInt(a[i]);
         tree.root = tree.Insert(tree.root, newNode);
-        cout << "tree.root==>" << tree.root->value << endl;
     }
     tree.BalanceFactor(tree.root);
-    cout << tree.root->left->depth - tree.root->right->depth << endl;
-    cout << "end" << endl;
     inOrderTraversal(tree.root);
     cout << endl;
-    preOrderTraversal(tree.root);
-    cout << endl;
-    postOrderTraversal(tree.root);
-
+    // preOrderTraversal(tree.root);
+    // cout << endl;
+    // postOrderTraversal(tree.root);
+    tree.root = tree.Delete(tree.root, 50);
+    inOrderTraversal(tree.root);
+    cout << "end" << endl;
     return 0;
 }
