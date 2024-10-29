@@ -7,11 +7,13 @@ struct TreeNodeInt
     int value;
     TreeNodeInt *left;
     TreeNodeInt *right;
+    int depth;
 
     TreeNodeInt(int v)
     {
         value = v;
         left = right = nullptr;
+        depth = 0;
     }
 };
 
@@ -76,13 +78,18 @@ public:
     // Tree_(/* args */);
     // ~Tree_();
     TreeNodeInt *Insert(TreeNodeInt *node, TreeNodeInt *newNode);
-    TreeNodeInt *BalanceBinaryTree(TreeNodeInt *node);
-    TreeNodeInt *BalanceTree(TreeNodeInt *node);
     TreeNodeInt *LeftRotate(TreeNodeInt *node);
     TreeNodeInt *RightRotate(TreeNodeInt *node);
     int BalanceFactor(TreeNodeInt *node);
 };
-
+int getDepth(TreeNodeInt *node)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+    return node->depth;
+}
 TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
 {
     if (node == nullptr)
@@ -92,21 +99,41 @@ TreeNodeInt *Tree_TreeNodeInt::Insert(TreeNodeInt *node, TreeNodeInt *newNode)
     if (node->value > newNode->value)
     {
         node->left = this->Insert(node->left, newNode);
-        return node;
     }
     if (node->value < newNode->value)
     {
         node->right = this->Insert(node->right, newNode);
-        return node;
     }
-}
+    this->BalanceFactor(node);
+    cout << "node left==> " << node->left << " node right==> " << node->right << endl;
+    int bf = getDepth(node->left) - getDepth(node->right);
 
-TreeNodeInt *Tree_TreeNodeInt::BalanceTree(TreeNodeInt *node)
-{
-    if (node == nullptr)
+    cout << "bf" << "==>" << node->value << "==>" << bf << endl;
+    // right right rotation
+    if (bf > 1 && newNode->value < node->left->value)
     {
-        return nullptr;
+        return RightRotate(node);
     }
+
+    // // left right rotate
+    if (bf > 1 && newNode->value > node->left->value)
+    {
+        node->left = LeftRotate(node->left);
+        return RightRotate(node);
+    }
+    // left left rotation
+    if (bf < -1 && newNode->value > node->right->value)
+    {
+        return LeftRotate(node);
+    }
+    // right left rotation
+    if (bf < -1 && newNode->value < node->right->value)
+    {
+        node->right = RightRotate(node->right);
+        return LeftRotate(node);
+    }
+
+    return node;
 }
 
 int Tree_TreeNodeInt::BalanceFactor(TreeNodeInt *node)
@@ -117,18 +144,9 @@ int Tree_TreeNodeInt::BalanceFactor(TreeNodeInt *node)
     }
     int Lb = 1 + BalanceFactor(node->left);
     int Rb = 1 + BalanceFactor(node->right);
-    if (abs(Lb - Rb) > 1)
-    {
-        // Balancing Logic
-    }
-    return max(abs(Lb), abs(Rb));
-}
-
-TreeNodeInt *Tree_TreeNodeInt::BalanceBinaryTree(TreeNodeInt *node)
-{
-    int bf = BalanceFactor(node) - 1;
-    cout << bf << endl;
-    return node;
+    int depth = max(Lb, Rb);
+    node->depth = depth;
+    return depth;
 }
 
 TreeNodeInt *Tree_TreeNodeInt::LeftRotate(TreeNodeInt *node)
@@ -142,7 +160,7 @@ TreeNodeInt *Tree_TreeNodeInt::LeftRotate(TreeNodeInt *node)
 
 TreeNodeInt *Tree_TreeNodeInt::RightRotate(TreeNodeInt *node)
 {
-    TreeNodeInt *temp  = node->left->right;
+    TreeNodeInt *temp = node->left->right;
     TreeNodeInt *temp1 = node->left;
     node->left->right = node;
     node->left = temp;
@@ -159,30 +177,29 @@ TreeNodeInt *Tree_TreeNodeInt::RightRotate(TreeNodeInt *node)
 
 int main()
 {
-    int a[10] = {90, 80};
-    // int a[10] = {20, 10, 40, 50, 60, 30, 90, 80, 71, 70};
+    // int a[10] = {90, 80};
+    int a[] = {20, 10, 40, 50, 60, 30, 90, 80, 71, 70, 5,6,89};
     Tree_TreeNodeInt tree;
     TreeNodeInt *root = new TreeNodeInt(100);
 
     tree.root = root;
     tree.Insert(nullptr, root);
-
     int arraySize = sizeof(a) / sizeof(int);
-
     for (int i = 0; i < arraySize; i++)
     {
+        cout << "a[i]==>" << a[i] << endl;
         TreeNodeInt *newNode = new TreeNodeInt(a[i]);
-        tree.Insert(tree.root, newNode);
+        tree.root = tree.Insert(tree.root, newNode);
+        cout << "tree.root==>" << tree.root->value << endl;
     }
-
+    tree.BalanceFactor(tree.root);
+    cout << tree.root->left->depth - tree.root->right->depth << endl;
+    cout << "end" << endl;
     inOrderTraversal(tree.root);
     cout << endl;
     preOrderTraversal(tree.root);
     cout << endl;
     postOrderTraversal(tree.root);
-    tree.BalanceBinaryTree(tree.root);
-    TreeNodeInt *rotated = tree.RightRotate(tree.root);
-    tree.BalanceBinaryTree(rotated);
 
     return 0;
 }
