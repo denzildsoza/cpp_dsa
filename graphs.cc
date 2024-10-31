@@ -37,7 +37,25 @@ int bfs(map<int, list<int>> &graph, int key)
 int main(int argc, char const *argv[])
 {
     map<int, list<int>> graph;
-    
+    graph[1].push_back(2);
+    graph[1].push_back(3);
+    graph[2].push_back(1);
+    graph[2].push_back(3);
+    graph[2].push_back(4);
+    graph[3].push_back(1);
+    graph[3].push_back(2);
+    graph[3].push_back(4);
+    graph[3].push_back(5);
+    graph[3].push_back(6);
+    graph[4].push_back(2);
+    graph[4].push_back(3);
+    graph[4].push_back(5);
+    graph[5].push_back(4);
+    graph[5].push_back(2);
+    graph[5].push_back(3);
+    graph[5].push_back(7);
+    graph[6].push_back(3);
+    graph[7].push_back(5);
 
     elements.push(1);
     bfs(graph, 1);
